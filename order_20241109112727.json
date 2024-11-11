@@ -1,0 +1,37 @@
+{
+    "donor": {
+        "email": "niranjansk.ai23@rvce.edu.in",
+        "address": "t,dasarahaali",
+        "contact": "9876543210"
+    },
+    "receiver": {
+        "email": "niranjansk.ai23@rvce.edu.in",
+        "address": "t,dasarahaali",
+        "contact": "9876543210"
+    },
+    "order_details": {
+        "food_type": "fresh",
+        "available_quantity": "60",
+        "question_1": {
+            "question": "Please confirm the food type you want to order:",
+            "answer": "Fresh Produce"
+        },
+        "question_2": {
+            "question": "How many servings would you need?",
+            "answer": "30"
+        },
+        "question_3": {
+            "question": "What time would you like the delivery/pickup?",
+            "answer": "12:00"
+        },
+        "question_4": {
+            "question": "Do you prefer pickup or delivery?",
+            "answer": "no"
+        },
+        "question_5": {
+            "question": "Please confirm your delivery address:",
+            "answer": "Ganganna road"
+        }
+    },
+    "timestamp": "2024-11-09T11:27:26.727481"
+}

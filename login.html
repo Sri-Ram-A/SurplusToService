@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <!-- Include CSS files here -->
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+  <style>
+    /* Custom button styling */
+    .custom-button {
+      background-color: #111; /* Dark background color */
+      color: #fff; /* White text color */
+      border: 2px solid #d2a679; /* Light brown border color */
+      border-radius: 50px; /* Rounded corners */
+      padding: 10px 30px; /* Padding for size */
+      font-size: 16px; /* Font size */
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .custom-button:hover {
+      background-color: #d2a679; /* Light brown background on hover */
+      color: #111; /* Dark text color on hover */
+    }
+
+    /* Additional UI enhancements */
+    .section-title h2 {
+      color: #d2a679;
+      font-weight: bold;
+    }
+
+    .section-title p {
+      color: #aaa;
+    }
+
+    #login .container {
+      max-width: 500px;
+      padding-top: 40px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+      padding: 15px;
+    }
+
+    .php-email-form {
+      background: #222;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .text-center {
+      margin-top: 20px;
+    }
+
+    .flash-messages {
+      margin-bottom: 20px;
+    }
+
+    .flash-message {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash-message.success {
+      background-color: #28a745;
+      color: #fff;
+    }
+
+    .flash-message.error {
+      background-color: #dc3545;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Section -->
+  <section id="login" class="login section">
+    <!-- Section Title -->
+    <div class="container section-title text-center" data-aos="fade-up">
+      <h2>LOGIN</h2>
+      <p>Access Your Account</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <!-- Flash Messages -->
+      <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert {{ category }}">{{ message }}</div>
+              <script>
+                // Set a delay in milliseconds (e.g., 3000ms = 3 seconds)
+                setTimeout(function() {
+                  // Select the alert element and hide it
+                  const alertElement = document.querySelector('.alert');
+                  if (alertElement) {
+                    alertElement.style.display = 'none'; // Hide the alert
+                  }
+                }, 2000); // Adjust delay time as needed
+              </script>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      <form action="{{ url_for('login') }}" method="post" class="php-email-form">
+        <div class="row gy-4">
+          <div class="col-12">
+            <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required>
+          </div>
+          <div class="col-12">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Your Password" required>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="custom-button">Login</button>
+        </div>
+        <div class="text-center mt-3">
+            <p style="color: #fff;">Don't have an account? <a href="{{ url_for('register') }}" style="color: #d2a679;">Register here</a></p>
+        </div>
+      </form><!-- End Login Form -->
+    </div>
+  </section><!-- /Login Section -->
+
+  <!-- Vendor JS Files -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

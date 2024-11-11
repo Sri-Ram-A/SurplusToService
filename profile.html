@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Questionnaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --golden: #D4A853;
+            --dark-bg: #111111;
+            --card-bg: #000000;
+            --text-color: #ffffff;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        .questionnaire-container {
+            width: 60%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .progress {
+            height: 8px;
+            margin-bottom: 2rem;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background-color: var(--golden);
+        }
+
+        .card {
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            margin: auto;
+        }
+
+        .card-title {
+            color: var(--golden);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .question-card {
+            transition: transform 0.5s ease;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            transform: translateX(100%);
+        }
+
+        .question-card.active {
+            position: relative;
+            transform: translateX(0);
+        }
+
+        .question-card.left {
+            transform: translateX(-100%);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--golden);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-color: var(--golden);
+            color: var(--text-color);
+            box-shadow: 0 0 0 2px rgba(212, 168, 83, 0.2);
+        }
+
+        .form-check-input {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-color: rgba(212, 168, 83, 0.5);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--golden);
+            border-color: var(--golden);
+        }
+
+        .form-check-label {
+            color: var(--text-color);
+        }
+
+        /* Updated styles for the dropdown */
+        .form-select {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23D4A853' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
+
+        .form-select:focus {
+            background-color: var(--card-bg);
+            border-color: var(--golden);
+            color: var(--text-color);
+            box-shadow: 0 0 0 2px rgba(212, 168, 83, 0.2);
+        }
+
+        .form-select option {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .form-select option:hover,
+        .form-select option:focus,
+        .form-select option:active {
+            background-color: var(--golden);
+            color: var(--dark-bg);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--golden);
+            border-color: var(--golden);
+            color: var(--dark-bg);
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #c09443;
+            border-color: #c09443;
+            color: var(--dark-bg);
+        }
+
+        .btn-outline-secondary {
+            color: var(--golden);
+            border-color: rgba(212, 168, 83, 0.5);
+            background: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: rgba(212, 168, 83, 0.1);
+            border-color: var(--golden);
+            color: var(--golden);
+        }
+
+        .btn-success {
+            background-color: var(--golden);
+            border-color: var(--golden);
+            color: var(--dark-bg);
+        }
+
+        .btn-success:hover {
+            background-color: #c09443;
+            border-color: #c09443;
+            color: var(--dark-bg);
+        }
+
+        .invalid-feedback {
+            color: #ff6b6b;
+            font-size: 0.875em;
+        }
+
+        /* Navigation styling */
+    #navmenu {
+        background-color: #111;
+        color: #fff;
+        padding: 15px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+  
+      #navmenu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 20px;
+      }
+  
+      #navmenu ul li a {
+        color: #d2a679;
+        text-decoration: none;
+      }
+    </style>
+</head>
+<body>
+    <nav id="navmenu" class="navmenu">
+        <!-- Navigation content remains unchanged -->
+    </nav>
+
+    <div class="container">
+        <div><h2><center>Complete your Profile</center><br></h2></div>
+        <div class="questionnaire-container">
+            <div class="progress mb-4">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+            </div>
+
+            <form id="questionnaireForm">
+                <!-- Card 1: User Type -->
+                <div class="question-card active" data-card="1">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Who are you?</h5>
+                        
+                            <!-- Dropdown for "I am a/an" -->
+                            <div class="mb-3">
+                                <label class="form-label">I am a/an *</label>
+                                <select id="userType" name="userType" class="form-select">
+                                    <option value="">Select an option</option>
+                                    <option value="ngo">Member of an NGO</option>
+                                    <option value="own">Owner of a Grocery store</option>
+                                    <option value="res">Restaurant</option>
+                                    <option value="ward">Hostel Warden</option>
+                                    <option value="oth">Others</option>
+                                </select>
+                                <!-- Textarea shown if "Others" is selected -->
+                                <textarea id="otherUserType" class="form-control mt-3" rows="1" name="otherUserType" style="display: none;" placeholder="Please specify"></textarea>
+                            </div>
+                        
+                            <!-- New Dropdown Question -->
+                            <div class="mb-3">
+                                <label class="form-label">What is your role? *</label>
+                                <select id="role" name="role" class="form-select" >
+                                    <option value="">Select your role</option>
+                                    <option value="volunteer">Volunteer</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <!-- Textarea shown if "Other" is selected -->
+                                <textarea id="otherRole" class="form-control mt-3" rows="1" name="otherRole" style="display: none;" placeholder="Please specify your role"></textarea>
+                            </div>
+                        
+                            <!-- Organization Question (changed to text input) -->
+                            <div class="mb-3">
+                                <label class="form-label">Organization *</label>
+                                <input type="text" class="form-control" name="organization"  placeholder="Enter your organization">
+                            </div>
+                        
+                            <button type="button" class="btn btn-primary float-end next-btn">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address card-->
+                <div class="question-card" data-card="2">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Where are you located?</h5>
+
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Flat or Building Number *</label>
+                                    <input type="text" class="form-control" required name="buildingNumber" placeholder="Flat or building number">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Apartment Name</label>
+                                    <input type="text" class="form-control" name="apartmentName" placeholder="Apartment name (if applicable)">
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Town / City *</label>
+                                    <input type="text" class="form-control" required name="town" placeholder="Town or city">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Landmark</label>
+                                    <input type="text" class="form-control" name="landmark" placeholder="Nearby landmark">
+                                </div>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Pincode *</label>
+                                <input type="text" class="form-control" required name="pincode" pattern="[0-9]{6}" placeholder="Area pincode">
+                            </div>
+                        
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary prev-btn">Previous</button>
+                                <button type="button" class="btn btn-primary next-btn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 3: Organization Contact Information -->
+                <div class="question-card" data-card="3">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Organization Contact Information</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label">Organization Email *</label>
+                                <input type="email" class="form-control" required name="organizationEmail" placeholder="Enter organization email">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Organization Landline Number</label>
+                                <input type="tel" class="form-control" name="landline" placeholder="Enter landline number (optional)">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" required name="phone" pattern="[0-9]{10}" placeholder="Enter your phone number">
+                            </div>
+                        
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary prev-btn">Previous</button>
+                                <button type="button" class="btn btn-primary next-btn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Type of Food Preferences -->
+                <div class="question-card" data-card="4">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Food Preferences</h5>
+                            <div class="mb-3">
+                                <label class="form-label d-block">Type of food to be received *</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="veg" id="vegCheck" name="foodType[]">
+                                    <label class="form-check-label" for="vegCheck">Vegetarian</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="nonveg" id="nonvegCheck" name="foodType[]">
+                                    <label class="form-check-label" for="nonvegCheck">Non-Vegetarian</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="jain" id="jainCheck" name="foodType[]">
+                                    <label class="form-check-label" for="jainCheck">Jain</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="halal" id="halalCheck" name="foodType[]">
+                                    <label class="form-check-label" for="halalCheck">Halal</label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary prev-btn">Previous</button>
+                                <button type="button" class="btn btn-primary next-btn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Transportation Availability -->
+                <div class="question-card" data-card="5">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Transportation Availability</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Is transportation available? (Optional)</label>
+                                <select name="transportationAvailability" class="form-select">
+                                    <option value="">Select an option</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary prev-btn">Previous</button>
+                                <button type="button" class="btn btn-primary next-btn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: General Time for Donation and Order -->
+                <div class="question-card" data-card="6">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Preferred Time for Donation and Order</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Preferred Donation Time *</label>
+                                <input type="time" class="form-control" required name="donationTime">
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Preferred Order Time *</label>
+                                <input type="time" class="form-control" required name="orderTime">
+                            </div>
+                        
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary prev-btn">Previous</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('questionnaireForm');
+            const cards = document.querySelectorAll('.question-card');
+            const progressBar = document.querySelector('.progress-bar');
+            const totalCards = cards.length;
+
+            // Update progress bar
+            function updateProgress(currentCard) {
+                const progress = (currentCard / totalCards) * 100;
+                progressBar.style.width = progress + '%';
+            }
+
+            // Show/hide textarea based on dropdown selection
+            function toggleTextarea(selectId, textareaId, targetValue) {
+                const selectElement = document.getElementById(selectId);
+                const textareaElement = document.getElementById(textareaId);
+
+                selectElement.addEventListener('change', function() {
+                    textareaElement.style.display = (selectElement.value === targetValue) ? 'block' : 'none';
+                });
+            }
+
+            toggleTextarea('userType', 'otherUserType', 'oth'); // Show "Other" for User Type
+            toggleTextarea('role', 'otherRole', 'other');       // Show "Other" for Role
+
+            // Navigation between cards
+            document.querySelectorAll('.next-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentCard = this.closest('.question-card');
+                    const currentInputs = currentCard.querySelectorAll('input[required], select[required], textarea[required]');
+                    let isValid = true;
+
+                    // Validation for required inputs
+                    currentInputs.forEach(input => {
+                        if (!input.checkValidity()) {
+                            isValid = false;
+                            input.classList.add('is-invalid');
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    });
+
+                    // Extra validation for food preferences (Card 4)
+                    if (currentCard.dataset.card === "4") {
+                        const foodTypeChecks = currentCard.querySelectorAll('input[name="foodType[]"]:checked');
+                        if (foodTypeChecks.length === 0) {
+                            isValid = false;
+                            alert("Please select at least one food preference.");
+                        }
+                    }
+
+                    // Navigate to the next card if valid
+                    if (!isValid) return;
+
+                    const nextCard = currentCard.nextElementSibling;
+                    if (nextCard) {
+                        currentCard.classList.remove('active');
+                        currentCard.classList.add('left');
+                        nextCard.classList.add('active');
+                        updateProgress(parseInt(nextCard.dataset.card));
+                    }
+                });
+            });
+
+            // Navigation to previous cards
+            document.querySelectorAll('.prev-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentCard = this.closest('.question-card');
+                    const prevCard = currentCard.previousElementSibling;
+                    if (prevCard) {
+                        currentCard.classList.remove('active');
+                        prevCard.classList.remove('left');
+                        prevCard.classList.add('active');
+                        updateProgress(parseInt(prevCard.dataset.card));
+                    }
+                });
+            });
+
+        // Final form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create a temporary message div
+            const messageDiv = document.createElement('div');
+            messageDiv.innerText = 'Profile complete! Redirecting to the homepage...';
+            messageDiv.style.color = 'var(--golden)';
+            messageDiv.style.textAlign = 'center';
+            messageDiv.style.marginTop = '20px';
+            
+            // Append the message below the questionnaire container
+            const questionnaireContainer = document.querySelector('.questionnaire-container');
+            questionnaireContainer.appendChild(messageDiv);
+            
+            // Redirect to the homepage after a delay
+            setTimeout(function() {
+                messageDiv.remove();
+                window.location.href = '/'; // Update '/' with the homepage URL if different
+            }, 3000); // Delay for 3 seconds
+        });
+        });
+    </script>
+</body>
+</html>

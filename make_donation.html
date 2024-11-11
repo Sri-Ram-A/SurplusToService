@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Donation - Surplus To Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1814;
+            color: #fff;
+        }
+        .form-container {
+            background: rgba(26, 24, 20, 0.9);
+            border: 2px solid #cda45e;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .form-label {
+            color: #cda45e;
+        }
+        .form-control, .form-select {
+            background-color: #272722;
+            border: 1px solid #625b4b;
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #cda45e;
+            border-color: #cda45e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4" style="color: #cda45e;">Make a Donation</h2>
+            <form action='make_donation' method="post">
+                <div class="mb-3">
+                    <label for="foodType" class="form-label">Food Type</label>
+                    <select class="form-select" id="foodType" name="foodType" required>
+                        <option value="">Select food type</option>
+                        <option value="fresh">Fresh Produce</option>
+                        <option value="cooked">Cooked Meals</option>
+                        <option value="packaged">Packaged Food</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity (Servings)</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" required>
+                </div>
+                <div class="mb-3">
+                    <label for="storage" class="form-label">Storage Requirements</label>
+                    <select class="form-select" id="storage" name="storage">
+                        <option value="">Select storage type</option>
+                        <option value="room">Room Temperature</option>
+                        <option value="refrigerated">Refrigerated</option>
+                        <option value="frozen">Frozen</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="dietary" class="form-label">Dietary Information</label>
+                    <input type="text" class="form-control" id="dietary" name="dietary" placeholder="e.g., Vegetarian, Gluten-free">
+                </div>
+                <div class="mb-3">
+                    <label for="expiryDate" class="form-label">Expiry Date</label>
+                    <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="expiryTime" class="form-label">Expiry Time</label>
+                    <input type="time" class="form-control" id="expiryTime" name="expiryTime" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Transportation Required</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="transportation" id="transportationYes" value="yes" required>
+                        <label class="form-check-label" for="transportationYes">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="transportation" id="transportationNo" value="no" required>
+                        <label class="form-check-label" for="transportationNo">No</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit Donation</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Surplus To Service</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    /* Page background color */
+    body {
+      background-color: #f3f4f6;
+    }
+
+    #chat-messages {
+      color: black;
+      /* Set text color to black */
+    }
+
+    .dashboard {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.34);
+      backdrop-filter: blur(10px);
+    }
+
+    h1,
+    h5,
+    h6 {
+      color: #000000;
+    }
+
+    .card-title {
+      color: #555555;
+      background-color: rgba(255, 255, 255, 0.43);
+      backdrop-filter: (10px);
+    }
+
+    .display-6 {
+      color: #111111;
+    }
+
+    #chatbot-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #chat-dialog {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    #chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #chat-messages {
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+    #hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none; /* Prevents clicks on the video */
+}
+
+.video-background iframe {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.content-overlay {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+}
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none; /* Prevents interaction with the video */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 177.78vh; /* 16:9 aspect ratio */
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    pointer-events: none;
+}
+
+
+
+    #chat-input button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header fixed-top">
+
+    <div class="topbar d-flex align-items-center">
+      <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex align-items-center">
+          <i class="bi bi-envelope d-flex align-items-center"><a
+              href="mailto:contact@example.com">sts@request.com</a></i>
+          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+91 98 98 9998</span></i>
+        </div>
+      </div>
+    </div><!-- End Top Bar -->
+
+    <div class="branding d-flex align-items-cente">
+
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="Main_page.html" class="logo d-flex align-items-center me-auto me-xl-0">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="assets/img/logo.png" alt=""> -->
+          <h1 class="sitename">Surplus To Service</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="#hero" class="active">Home<br></a></li>
+            <li><a href="#about">About</a></li>
+            {% if 'user' in session %}
+            <li><a href='logout'>Logout</a></li>
+            {% else %}
+            <li><a href='login'>Login</a></li>
+            <li><a href='register'>Register</a></li>
+            {% endif %}
+            <li><a href="#food_donors">Food Donors</a></li>
+            <li><a class="btn-book-a-table d-none d-xl-block" href="make_donation">Make Donations</a></li>
+            <li><a href="view_donation">View Donations</a></li>
+            {% if 'user' in session %}
+            <li><a href='profile'>Complete Profile</a></li>
+            {% else %}
+            <li><a href='#'></a></li>
+            {% endif %}
+            <li><a href="#events">Inspiration</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <p style="margin-right:100px"></p>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <style>
+      .hero {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        padding: 0;
+        overflow: hidden;
+      }
+      
+      .video-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      .video-container iframe {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 100vh;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        aspect-ratio: 16/9;
+      }
+      
+      /* For screens with different aspect ratios */
+      @media (min-aspect-ratio: 16/9) {
+        .video-container iframe {
+          height: 56.25vw;
+        }
+      }
+      
+      @media (max-aspect-ratio: 16/9) {
+        .video-container iframe {
+          width: 177.78vh;
+        }
+      }
+      
+      .content-overlay {
+        position: relative;
+        z-index: 2;
+        padding-top: 120px;
+      }
+      
+      .hero-text {
+        color: #ffffff;  /* Black text color */
+        font-weight: 500;  /* Medium weight for better visibility */
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);  /* White text shadow for better readability */
+      }
+      
+      .dark-background::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+      }
+      </style>
+      
+      <section id="hero" class="hero section dark-background">
+        <div class="video-container" data-aos="fade-in">
+          <iframe 
+            src="https://www.youtube.com/embed/TqhNILVX8IE?autoplay=1&mute=1&loop=1&controls=0&playlist=TqhNILVX8IE&enablejsapi=1&version=3&playerapiid=ytplayer"
+            title="YouTube video player" 
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        
+        <div class="container content-overlay">
+          <div class="row">
+            <div >
+              <h2 data-aos="fade-up" data-aos-delay="100"  class="hero-text" style="margin-top: -230px;margin-left:100px;">Welcome to <span>Surplus To Service</span></h2>
+              <p data-aos="fade-up" data-aos-delay="200" class="hero-text">Feed the soul, nourish the heart, and embrace the forgotten; for in the simplest acts of kindness lies the power to transform lives,and mother a nation</p>
+              <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+                <a href="view_donation.html" class="cta-btn" >Our Menu</a>
+                <a href="make_donation.html" class="cta-btn" style="margin-left: 900px ;" >Make Donation</a>
+              </div>
+            </div>
+            <div class="col-lg-4 d-flex align-items-center justify-content-center mt-5 mt-lg-0">
+              <a href="https://www.youtube.com/watch?v=TqhNILVX8IE" class="glightbox pulsating-play-btn" style="margin-top: -400px;margin-left: 200px;"></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- About Section -->
+    <section id="about" class="specials section">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Small acts, when multiplied by many, can transform the world.</h2>
+        <p>What Are We Doing ?</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row">
+          <div class="col-lg-3">
+            <ul class="nav nav-tabs flex-column">
+              <li class="nav-item">
+                <a class="nav-link active show" data-bs-toggle="tab" href="#specials-tab-1">Bridging the Food Gap</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#specials-tab-2">Streamlined Logistics</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#specials-tab-3">Quality Assurance</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#specials-tab-4">Transparent Impact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#specials-tab-5">Sustainable Change</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-9 mt-4 mt-lg-0">
+            <div class="tab-content">
+              <div class="tab-pane active show" id="specials-tab-1">
+                <div class="row">
+                  <div class="col-lg-8 details order-2 order-lg-1">
+                    <h3>Nourishing Communities, One Meal at a Time</h3>
+                    <p class="fst-italic">We're committed to reducing food waste and alleviating hunger.</p>
+                    <p>By connecting hotels with communities in need, we ensure that surplus food finds its way to those
+                      who need it most. Our innovative platform empowers hotels to make a positive impact on society
+                      while minimizing their environmental footprint.</p>
+                  </div>
+                  <div class="col-lg-4 text-center order-1 order-lg-2">
+                    <img src="assets/img/point1.jpeg" alt="" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="specials-tab-2">
+                <div class="row">
+                  <div class="col-lg-8 details order-2 order-lg-1">
+                    <h3>Seamless Delivery, Maximum Impact</h3>
+                    <p class="fst-italic">Our dedicated team handles every aspect of the logistics process, from
+                      collection to distribution. </p>
+                    <p>We optimize routes, coordinate with partners, and ensure timely delivery to maximize the impact
+                      of each donation. Our efficient system guarantees that food reaches the right hands at the right
+                      time.</p>
+                  </div>
+                  <div class="col-lg-4 text-center order-1 order-lg-2">
+                    <img src="assets/img/streamlined_logitics.jpeg" alt="" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="specials-tab-3">
+                <div class="row">
+                  <div class="col-lg-8 details order-2 order-lg-1">
+                    <h3>Prioritizing Safety and Well-being</h3>
+                    <p class="fst-italic">We prioritize the safety and well-being of those who receive the food.</p>
+                    <p>Our rigorous quality checks ensure that all food items meet strict hygiene standards. We work
+                      closely with our partners to maintain the highest level of food safety and quality.</p>
+                  </div>
+                  <div class="col-lg-4 text-center order-1 order-lg-2">
+                    <img src="assets/img/quality_assurance.jpeg" alt="" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="specials-tab-4">
+                <div class="row">
+                  <div class="col-lg-8 details order-2 order-lg-1">
+                    <h3>Empowering Donors, Inspiring Change</h3>
+                    <p class="fst-italic">Our platform provides donors with real-time updates on the journey of their
+                      contributions.</p>
+                    <p>By tracking the impact of their donations, donors can see firsthand how their generosity is
+                      making a difference. This transparency fosters trust and encourages continued support.</p>
+                  </div>
+                  <div class="col-lg-4 text-center order-1 order-lg-2">
+                    <img src="assets/img/transparent_imapct.jpeg" alt="" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="specials-tab-5">
+                <div class="row">
+                  <div class="col-lg-8 details order-2 order-lg-1">
+                    <h3>Building a Better Future, Together</h3>
+                    <p class="fst-italic">By creating a sustainable network between food donors and communities in need,
+                      we're driving long-lasting change.</p>
+                    <p>Our approach not only addresses immediate hunger needs but also promotes a culture of food
+                      sustainability and social responsibility. Together, we can build a more equitable and food-secure
+                      future.</p>
+                  </div>
+                  <div class="col-lg-4 text-center order-1 order-lg-2">
+                    <img src="assets/img/future.jpeg" alt="" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Specials Section -->
+
+
+    <!-- food_donors Section -->
+    <section id="food_donors" class="menu section">
+      <!-- Why Us Section -->
+      <section id="why-us" class="why-us section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Donors</h2>
+          <p>TOP THREE FOOD DONORS</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+          <div class="row gy-4">
+
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-item">
+                <span>01</span>
+                <h4><a href="#specials" class="stretched-link">The Taj Group of Hotels</a></h4>
+                <p>Known for its commitment to community welfare, The Taj Group regularly donates high-quality standard
+                  meals to support NGOs and shelters, helping to fight hunger across multiple cities.</p>
+              </div>
+            </div><!-- Card Item -->
+
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-item">
+                <span>02</span>
+                <h4><a href="" class="stretched-link">ITC Hotels</a></h4>
+                <p>With a mission rooted in sustainability, ITC Hotels channels surplus, freshly prepared meals to local
+                  orphanages and ashrams, ensuring that no good food goes to waste.</p>
+              </div>
+            </div><!-- Card Item -->
+
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+              <div class="card-item">
+                <span>03</span>
+                <h4><a href="" class="stretched-link">Marriott International</a></h4>
+                <p>Marriott is a leader in food donation initiatives, partnering with organizations to deliver
+                  nutritious meals to underserved communities, demonstrating its dedication to giving back.</p>
+              </div>
+            </div><!-- Card Item -->
+
+          </div>
+
+        </div>
+
+      </section>
+      <!-- /View Donations -->
+
+      <!-- Section Title -->
+      <!-- Menu Item -->
+      <!-- Specials Section -->
+      <!-- Events Section -->
+      <!-- ... (previous HTML code remains unchanged) ... -->
+
+      <div id="chatbot-btn" onclick="toggleChat()">💬</div>
+
+      <div id="chat-dialog">
+        <div id="chat-header">Chat with Surplus To Service</div>
+        <div id="chat-messages"></div>
+        <div id="chat-input">
+          <input type="text" id="user-message" placeholder="Type your question..." onkeypress="handleKeyPress(event)">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+      
+      <!-- ... (previous HTML code remains unchanged) ... -->
+
+<script>
+  const questions = [
+      "What is your address(Click 'P' to take from profile)?",
+      "How many servings do you require(number)?",f,
+      "Would you like us to arrange pickup or will you drop it off(Yes or No)?",
+      "Provide your mail ID"
+  ];
+  let currentQuestionIndex = 0;
+  let isAskingPresetQuestions = true;
+
+  function toggleChat() {
+      const chatDialog = document.getElementById("chat-dialog");
+      chatDialog.style.display = chatDialog.style.display === "none" ? "block" : "none";
+  }
+
+  function sendMessage() {
+      let userMessage = document.getElementById("user-message").value;
+      document.getElementById("user-message").value = "";
+
+      if (!userMessage) return;
+
+      const chatMessages = document.getElementById("chat-messages");
+      chatMessages.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+
+      if (isAskingPresetQuestions) {
+          sendAnswerToBackend(questions[currentQuestionIndex - 1], userMessage);
+          askNextQuestion();
+      } else {
+          fetch("http://127.0.0.1:5000/chatbot", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ message: userMessage })
+          })
+          .then(response => response.json())
+          .then(data => {
+              chatMessages.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+          })
+          .catch(error => {
+              console.error("Error:", error);
+              chatMessages.innerHTML += `<div><strong>Bot:</strong> Sorry, I encountered an error. Please try again later.</div>`;
+          });
+      }
+  }
+
+  function handleKeyPress(event) {
+      if (event.key === "Enter") {
+          sendMessage();
+      }
+  }
+
+  function askNextQuestion() {
+      const chatMessages = document.getElementById("chat-messages");
+      if (currentQuestionIndex < questions.length) {
+          chatMessages.innerHTML += `<div><strong>Bot:</strong> ${questions[currentQuestionIndex]}</div>`;
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          currentQuestionIndex++;
+      } else {
+          isAskingPresetQuestions = false;
+          chatMessages.innerHTML += "<div><strong>Bot:</strong> Thank you! Your donation information is complete. How else can I assist you?</div>";
+      }
+  }
+
+  function sendAnswerToBackend(question, answer) {
+      fetch("http://127.0.0.1:5000/store_answer", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question: question, answer: answer })
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log("Answer stored successfully:", data);
+      })
+      .catch(error => {
+          console.error("Error saving answer:", error);
+      });
+  }
+
+  // Initialize chat when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+      const chatMessages = document.getElementById("chat-messages");
+      chatMessages.innerHTML = "<div><strong>Bot:</strong> Welcome to SurplustoService! How can I help you today?</div>";
+  });
+</script>
+
+<!-- ... (remaining HTML code remains unchanged) ... -->
+
+      <!-- ... (remaining HTML code remains unchanged) ... -->
+
+      <!-- ... (remaining HTML code remains unchanged) ... -->
+      <div class="container-fluid mt-5 pt-5">
+        <div class="row">
+          <!-- Global Food Wastage Section -->
+          <div class="col-md-6">
+            <div class="dashboard" id="globalDashboard">
+              <h1 class="text-center mb-3">Global Food Wastage</h1>
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <h6>Total Food Wasted</h6>
+                      <p class="display-6" id="globalWastage">Loading...</p>
+                    </div>
+                    <div class="col-md-4">
+                      <h6>Wastage per Capita</h6>
+                      <p class="display-6" id="perCapitaWastage">Loading...</p>
+                    </div>
+                    <div class="col-md-4">
+                      <h6>Economic Impact</h6>
+                      <p class="display-6" id="economicImpact">Loading...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food Wastage in India Section -->
+          <div class="col-md-6">
+            <div class="dashboard" id="indiaDashboard" align="center">
+              <h1 class="text-center mb-3">Food Wastage in India</h1>
+              <div class="card">
+                <div class="card-body" align="center">
+                  <div class="row" align="center">
+                    <div class="col-md-4">
+                      <h6>Total Food Wasted in India</h6>
+                      <p class="display-6" id="indiaWastage">Loading...</p>
+                    </div>
+                    <div class="col-md-4">
+                      <h6>Urban Food Waste</h6>
+                      <p class="display-6" id="urbanWaste">Loading...</p>
+                    </div>
+                    <div class="col-md-4">
+                      <h6>Rural Food Waste</h6>
+                      <p class="display-6" id="ruralWaste">Loading...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+        // Function to update data in both dashboards
+        function updateData() {
+          document.getElementById('globalWastage').textContent = Math.floor(Math.random() * 10000) + ' tons';
+          document.getElementById('perCapitaWastage').textContent = (Math.random() * 100).toFixed(2) + ' kg';
+          document.getElementById('economicImpact').textContent = '$' + (Math.random() * 1).toFixed(1) + ' billion';
+          document.getElementById('indiaWastage').textContent = Math.floor(Math.random() * 10000) + ' tons';
+          document.getElementById('urbanWaste').textContent = Math.floor(Math.random() * 50000) + ' tons';
+          document.getElementById('ruralWaste').textContent = Math.floor(Math.random() * 50000) + ' tons';
+        }
+
+        // Initial update and set interval to update data every 5 seconds
+        setInterval(updateData, 5000);
+        updateData();
+
+        // Function to handle scroll animations
+        function isElementInViewport(el) {
+          const rect = el.getBoundingClientRect();
+          return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          );
+        }
+
+        // Add 'visible' class on scroll for animation
+        function handleScroll() {
+          const elements = document.querySelectorAll('.fade-in, .zoom-in');
+          elements.forEach(el => {
+            if (isElementInViewport(el)) {
+              el.classList.add('visible');
+            }
+          });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
+      </script>
+      <section id="events" class="events section">
+
+        <img class="slider-bg" src="assets/img/events-bg.jpg" alt="" data-aos="fade-in">
+        <div class="container">
+          <div class="swiper init-swiper" data-aos="fade-up" data-aos-delay="100">
+            <script type="application/json" class="swiper-config">
+          {
+            "loop": true,
+            "speed": 600,
+            "autoplay": {
+              "delay": 5000
+            },
+            "slidesPerView": "auto",
+            "pagination": {
+              "el": ".swiper-pagination",
+              "type": "bullets",
+              "clickable": true
+            }
+          }
+        </script>
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="row gy-4 event-item">
+                  <div class="col-lg-6">
+                    <img src="assets/img/top1.jpeg" class="img-fluid" alt="">
+                  </div>
+                  <div class="col-lg-6 pt-4 pt-lg-0 content">
+                    <h3>Narayanan Krishnan</h3>
+                    <ul>
+                      <li><i class="bi bi-check2-circle"></i> <span>Compassionate Leadership: Narayanan Krishnan founded
+                          Akshaya Trust in 2003 to provide meals to the homeless, elderly, and mentally ill in Madurai,
+                          India.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Innovative Approach: Krishnan's initiative, Akshaya
+                          Trust, provides not only food but also shelter, clothing, and emotional support to those in
+                          need.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Innovative Approach: Krishnan's initiative, Akshaya
+                          Trust, provides not only food but also shelter, clothing, and emotional support to those in
+                          need.</span></li>
+                    </ul>
+                    <p class="fst-italic">
+                      Narayanan Krishnan's selfless journey, inspired by a chance encounter with a homeless man,
+                      transformed him from a luxury hotel chef to a humanitarian serving over 2 million meals through
+                      Akshaya Trust. His unwavering dedication reminds us that kindness can spark profound change,
+                      filling not just stomachs, but souls.
+                    </p>
+                  </div>
+                </div>
+              </div><!-- End Slider item -->
+
+              <div class="swiper-slide">
+                <div class="row gy-4 event-item">
+                  <div class="col-lg-6">
+                    <img src="assets/img/top2.avif" class="img-fluid" alt="">
+                  </div>
+                  <div class="col-lg-6 pt-4 pt-lg-0 content">
+                    <h3>Sonu Foods</h3>
+                    <ul>
+                      <li><i class="bi bi-check2-circle"></i> <span>COVID-19 Relief Efforts: Sonu Sood provided critical
+                          support during the pandemic, helping migrants, daily wage workers, and those in need with
+                          food, shelter, and medical aid.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Massive Food Distribution: Sood distributed millions
+                          of meals through his charitable initiatives, ensuring the hungry were fed and vulnerable
+                          communities received essential supplies.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Inspiring Philanthropy: His selfless work motivated
+                          others to join the cause, fostering a culture of kindness and generosity among Indians</span>
+                      </li>
+                    </ul>
+                    <p class="fst-italic">
+                      Sonu Sood's remarkable transformation from actor to real-life hero inspired a nation, providing
+                      sustenance and hope to countless individuals during COVID-19. With unwavering dedication, he
+                      bridged gaps in healthcare, education, and livelihoods, impacting millions. His selflessness
+                      redefines celebrity philanthropy, showcasing kindness without bounds.
+                    </p>
+                  </div>
+                </div>
+              </div><!-- End Slider item -->
+
+              <div class="swiper-slide">
+                <div class="row gy-4 event-item">
+                  <div class="col-lg-6">
+                    <img src="assets/img/top3.jpeg" class="img-fluid" alt="" width="600" height="500">
+                  </div>
+                  <div class="col-lg-6 pt-4 pt-lg-0 content">
+                    <h3>Sindhutai Sapkal </h3>
+                    <ul>
+                      <li><i class="bi bi-check2-circle"></i> <span>Mother to Over 1,000 Orphans: Sindhutai Sapkal has
+                          adoptedPioneering Social Work: She founded the Sanmati Bal Niketan orphanage and has worked
+                          tirelessly for women's and children's rights, combating poverty, and promoting
+                          education.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Pioneering Social Work: She founded the Sanmati Bal
+                          Niketan orphanage and has worked tirelessly for women's and children's rights, combating
+                          poverty, and promoting education.</span></li>
+                      <li><i class="bi bi-check2-circle"></i> <span>Inspiring Resilience: Despite facing personal
+                          struggles and hardships, Sindhutai Sapkal's unwavering determination has inspired countless
+                          individuals to make a positive impact in their communities.</span></li>
+                    </ul>
+                    <p class="fst-italic">
+                      Sindhutai Sapkal, affectionately known as the "Mother of Orphans," is a beacon of hope and
+                      selflessness. Abandoned by her husband and family at 20, she understood the pain of being
+                      unwanted. Today, she has dedicated her life to nurturing over 1,000 orphaned children, empowering
+                      women, and fighting social injustices. Her remarkable journey showcases resilience, compassion,
+                      and the transformative power of kindness.
+                    </p>
+                  </div>
+                </div>
+              </div><!-- End Slider item -->
+
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+
+        </div>
+
+      </section><!-- /Events Section -->
+
+      <!-- Contact Section -->
+      <section id="contact" class="contact section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Contact</h2>
+          <p>Contact Us</p>
+        </div><!-- End Section Title -->
+
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+          <div class="row gy-4">
+
+            <div class="col-lg-4">
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h3>Location</h3>
+                  <p>RR Nagar, Bengaluru 560059</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                <i class="bi bi-telephone flex-shrink-0"></i>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                <i class="bi bi-telephone flex-shrink-0"></i>
+                <div>
+                  <h3>Call Us</h3>
+                  <p>+91 999 999 9999</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h3>Email Us</h3>
+                  <p>sts@service.com</p>
+                </div>
+              </div><!-- End Info Item -->
+
+            </div>
+
+            <div class="col-lg-8">
+              <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
+                data-aos-delay="200">
+                <div class="row gy-4">
+
+                  <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                  </div>
+
+                  <div class="col-md-6 ">
+                    <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                  </div>
+
+                  <div class="col-md-12">
+                    <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                  </div>
+
+                  <div class="col-md-12">
+                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                  </div>
+
+                  <div class="col-md-12 text-center">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                    <button type="submit">Send Message</button>
+                  </div>
+
+                </div>
+              </form>
+            </div><!-- End Contact Form -->
+          </div>
+        </div>
+      </section>
+      <!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="Main_page.html" class="logo d-flex align-items-center">
+            <span class="sitename">Surplus To Service</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>RR Nagar</p>
+            <p>Bengaluru 560059</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+91 999 999 9999</span></p>
+            <p><strong>Email:</strong> <span>sts@service.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Surplus To Service</strong> <span>All Rights
+          Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">Team Yukthi </a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

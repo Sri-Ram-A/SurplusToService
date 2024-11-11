@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Donations - Surplus To Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1814;
+            color: #fff;
+        }
+        .donation-item {
+            background-color: rgba(41, 38, 31, 0.8);
+            border: 1px solid #cda45e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        .donation-item:hover {
+            box-shadow: 0 0 10px #cda45e;
+        }
+        .donation-item h5 {
+            color: #cda45e;
+        }
+        .place-order-btn {
+            background-color: #cda45e;
+            color: #1a1814;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .place-order-btn:hover {
+            background-color: #ffda6b;
+            box-shadow: 0 0 8px #ffda6b;
+        }
+        .place-order-btn svg {
+            margin-right: 5px;
+            fill: #1a1814;
+        }
+        #chatbot-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #cda45e;
+            color: #1a1814;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #chat-dialog {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background-color: #fff;
+            border: 1px solid #cda45e;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 1000;
+        }
+        #chat-header {
+            background-color: #cda45e;
+            color: #1a1814;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #chat-messages {
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            color: #1a1814;
+        }
+        #chat-input {
+            display: flex;
+            border-top: 1px solid #cda45e;
+        }
+        #chat-input input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+        }
+        #chat-input button {
+            background-color: #cda45e;
+            border: none;
+            color: #1a1814;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h2 class="text-center mb-4" style="color: #cda45e;">Available Donations</h2>
+        <div class="row">
+            {% for donation in donations %}
+            <div class="col-md-6 mb-4">
+                <div class="donation-item" data-donor-email="{{ donation.user_email }}">
+                    <h5>{{ donation.food_type }}</h5>
+                    <p><strong>Quantity:</strong> {{ donation.quantity }} servings</p>
+                    <p><strong>Storage:</strong> {{ donation.storage }}</p>
+                    <p><strong>Dietary Info:</strong> {{ donation.dietary }}</p>
+                    <p><strong>Expires:</strong> {{ donation.expiry_date }} at {{ donation.expiry_time }}</p>
+                    <p><strong>Transportation:</strong> {{ 'Required' if donation.transportation == 'yes' else 'Not required' }}</p>
+                    <p><strong>Donor:</strong> <a href="{{ url_for('user_posts', user_email=donation.user_email) }}">{{ donation.user_email }}</a></p>
+                    
+                    <!-- Place Order Button -->
+                    <button class="place-order-btn" onclick="startChatbot('{{ donation.food_type }}', '{{ donation.quantity }}', '{{ donation.user_email }}', this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                            <path d="M12 2a10 10 0 0 1 10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2zm1 10h8v2h-8v8h-2v-8H3v-2h8V4h2v8z"/>
+                        </svg>
+                        Place Order
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Chat Dialog -->
+    <div id="chat-dialog" style="display: none;">
+        <div id="chat-header">Order Details</div>
+        <div id="chat-messages"></div>
+        <div id="chat-input">
+            <input type="text" id="user-message" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Please confirm the food type you want to order:",
+            "How many servings would you need?",
+            "What time would you like the delivery/pickup?",
+            "Do you prefer pickup or delivery?",
+            "Please confirm your delivery address:"
+        ];
+        let currentQuestionIndex = 0;
+        let isAskingPresetQuestions = true;
+        let orderData = {
+            donor_email: '',
+            chatbot_responses: {}
+        };
+
+        function startChatbot(foodType, quantity, donorEmail, button) {
+            orderData.donor_email = donorEmail;
+            orderData.chatbot_responses.food_type = foodType;
+            orderData.chatbot_responses.available_quantity = quantity;
+
+            toggleChat();
+            const chatMessages = document.getElementById("chat-messages");
+            chatMessages.innerHTML = `<div><strong>Bot:</strong> Welcome! You're interested in ${foodType} (${quantity} servings available). Let's confirm your order details.</div>`;
+            askNextQuestion();
+        }
+
+        function sendMessage() {
+            let userMessage = document.getElementById("user-message").value;
+            document.getElementById("user-message").value = "";
+
+            if (!userMessage) return;
+
+            const chatMessages = document.getElementById("chat-messages");
+            chatMessages.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+
+            if (isAskingPresetQuestions) {
+                orderData.chatbot_responses[`question_${currentQuestionIndex}`] = {
+                    question: questions[currentQuestionIndex - 1],
+                    answer: userMessage
+                };
+                askNextQuestion();
+            }
+        }
+
+        function confirmOrder() {
+            fetch('/complete_order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    const chatMessages = document.getElementById("chat-messages");
+                    chatMessages.innerHTML += `
+                        <div><strong>Bot:</strong> Order confirmed! Here's your order summary:</div>
+                        <div class="order-summary">
+                            <p><strong>Donor Email:</strong> ${orderData.donor_email}</p>
+                            <p><strong>Food Type:</strong> ${orderData.chatbot_responses.food_type}</p>
+                            <p><strong>Quantity:</strong> ${orderData.chatbot_responses.question_2.answer}</p>
+                            <p><strong>Delivery Time:</strong> ${orderData.chatbot_responses.question_3.answer}</p>
+                            <p><strong>Delivery Method:</strong> ${orderData.chatbot_responses.question_4.answer}</p>
+                            <p><strong>Delivery Address:</strong> ${orderData.chatbot_responses.question_5.answer}</p>
+                        </div>
+                        <div><strong>Bot:</strong> A confirmation has been sent and your order details have been saved.</div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your order. Please try again.');
+            });
+        }
+
+        function toggleChat() {
+            const chatDialog = document.getElementById("chat-dialog");
+            chatDialog.style.display = chatDialog.style.display === "none" ? "block" : "none";
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        function askNextQuestion() {
+            const chatMessages = document.getElementById("chat-messages");
+            if (currentQuestionIndex < questions.length) {
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> ${questions[currentQuestionIndex]}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                currentQuestionIndex++;
+            } else {
+                isAskingPresetQuestions = false;
+                chatMessages.innerHTML += "<div><strong>Bot:</strong> Thank you! Your order information is complete. Here's a summary:</div>";
+                chatMessages.innerHTML += "<div><strong>Bot:</strong> Is there anything else you'd like to add or change?</div>";
+                chatMessages.innerHTML += "<button onclick='confirmOrder()'>Confirm Order</button>";
+            }
+        }
+    </script>
+</body>
+</html>

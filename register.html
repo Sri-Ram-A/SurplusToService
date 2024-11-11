@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Restaurantly</title>
+  <!-- Include CSS files here -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+  <style>
+    /* Custom button styling */
+    .custom-button {
+      background-color: #111; /* Dark background color */
+      color: #fff; /* White text color */
+      border: 2px solid #d2a679; /* Light brown border color */
+      border-radius: 50px; /* Rounded corners */
+      padding: 10px 30px; /* Padding for size */
+      font-size: 16px; /* Font size */
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .custom-button:hover {
+      background-color: #d2a679; /* Light brown background on hover */
+      color: #111; /* Dark text color on hover */
+    }
+
+    /* Additional UI enhancements */
+    .section-title h2 {
+      color: #d2a679;
+      font-weight: bold;
+    }
+
+    .section-title p {
+      color: #aaa;
+    }
+
+    #register .container {
+      max-width: 500px;
+      padding-top: 40px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+      padding: 15px;
+    }
+
+    .php-email-form {
+      background: #222;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .text-center {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Register Section -->
+  <section id="register" class="register section">
+    <!-- Section Title -->
+    <div class="container section-title text-center" data-aos="fade-up">
+      <h2>REGISTER</h2>
+      <p>Create a New Account</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <form action="register" method="post" class="php-email-form" enctype="multipart/form-data">
+        <div class="row gy-4">
+          <div class="col-lg-6 col-md-6">
+            <input type="text" name="name" class="form-control" id="name" placeholder="Full Name" required>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <input type="password" name="confirm_password" class="form-control" id="confirm_password" placeholder="Confirm Password" required>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <input type="text" name="address" class="form-control" id="address" placeholder="Full Address with Landmarks" required>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <input type="tel" name="contact" class="form-control" id="contact" placeholder="Contact Number" required pattern="[0-9]{10}" title="Please enter a 10-digit phone number">
+        </div>        
+          <!-- Legal Documents Upload Field -->
+          <div class="col-12">
+            <label for="legal-documents" class="form-label" style="color: #aaa;">Upload Legal Documents</label>
+            <input type="file" name="legal_documents" class="form-control" id="legal-documents" required>
+            <small class="text-muted" style="color: #111;">Upload original registration document, memorandum of association, etc.</small>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="custom-button"><a>Register</button>
+        </div>
+        <div class="text-center mt-3">
+          <p style="color: #fff;">Already have an account? <a href="login.html" style="color: #d2a679;">Login here</a></p>
+        </div>
+      </form><!-- End Register Form -->
+    </div>
+  </section><!-- /Register Section -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>
