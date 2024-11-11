@@ -15,7 +15,7 @@ loc = "C:\\Users\\SriRam.A\\Documents"
 
 # Initialize Flask app with the correct template and static folder paths
 app = Flask(__name__, 
-            template_folder=os.path.join(loc, "Restaurantly"),
+            template_folder=os.path.join(loc, "Restaurantly","views"),
             static_folder=os.path.join(loc, "Restaurantly", "assets"))
 
 # Set a secret key for session management
@@ -167,7 +167,7 @@ def complete_order():
         db.collection('orders').add(order_data)
 
         # Save to JSON file
-        filename = f"order_{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
+        filename = f"orders\\order_{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
         with open(filename, 'w') as f:
             json.dump(order_data, f, indent=4)
 

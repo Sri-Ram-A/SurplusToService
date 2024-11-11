@@ -1,0 +1,37 @@
+{
+    "donor": {
+        "email": "niranjansk.ai23@rvce.edu.in",
+        "address": "t,dasarahaali",
+        "contact": "9876543210"
+    },
+    "receiver": {
+        "email": "prathammmallya.ai23@rvce.edu.in",
+        "address": null,
+        "contact": null
+    },
+    "order_details": {
+        "food_type": "fresh",
+        "available_quantity": "60",
+        "question_1": {
+            "question": "Please confirm the food type you want to order:",
+            "answer": "Fresh food"
+        },
+        "question_2": {
+            "question": "How many servings would you need?",
+            "answer": "35"
+        },
+        "question_3": {
+            "question": "What time would you like the delivery/pickup?",
+            "answer": "12:00"
+        },
+        "question_4": {
+            "question": "Do you prefer pickup or delivery?",
+            "answer": "pickup"
+        },
+        "question_5": {
+            "question": "Please confirm your delivery address:",
+            "answer": "Central Jail"
+        }
+    },
+    "timestamp": "2024-11-11T07:17:25.924053"
+}
