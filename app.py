@@ -24,7 +24,7 @@ app.secret_key = 'your_secret_key_here'  # Replace with a strong, random key
 # Email configuration
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-SMTP_USER = "niranjansk.ai23@rvce.edu.in"
+SMTP_USER = "-your_email_"
 SMTP_PASSWORD = "_password_here_"
 
 # Initialize Firebase Admin SDK
