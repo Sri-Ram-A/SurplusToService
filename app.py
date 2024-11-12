@@ -25,7 +25,7 @@ app.secret_key = 'your_secret_key_here'  # Replace with a strong, random key
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 SMTP_USER = "niranjansk.ai23@rvce.edu.in"
-SMTP_PASSWORD = "HarryPotter@03"
+SMTP_PASSWORD = "_password_here_"
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate(os.path.join(loc, "Restaurantly", "surplustoservice-6a995-firebase-adminsdk-gssz6-06c67d0a0c.json"))
