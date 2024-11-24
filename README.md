@@ -12,6 +12,7 @@ A web application that connects food donors with those in need, helping to reduc
 - Email notifications
 - User profile management
 - Firebase integration for data storage
+- Chatbot 
 
 ## Prerequisites
 
