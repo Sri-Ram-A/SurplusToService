@@ -25,7 +25,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/SurplusToService.git
+   git clone https://github.com/Sri-Ram-A/SurplusToService.git
    cd SurplusToService
    ```
 
@@ -48,7 +48,7 @@ Before you begin, ensure you have the following installed:
 4. **Firebase Setup**
    - Create a new project in [Firebase Console](https://console.firebase.google.com/)
    - Generate a new private key from Project Settings > Service Accounts
-   - Save the JSON file as `surplustoservice-6a995-firebase-adminsdk-gssz6-06c67d0a0c.json` in the project root
+   - Save the JSON file as `.json` in the project root
 
 5. **Configure Email Settings**
    - Open `app.py`
