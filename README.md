@@ -1,4 +1,4 @@
-# 🥫 SurplusToService
+# SurplusToService
 
 > **Connecting food donors to those in need. Fighting waste. Feeding communities.**
 
@@ -178,15 +178,14 @@ Want to help improve the platform?
 4. Open a Pull Request!
 
 ---
+## 📜 Contributors
+- [Niranjan S Kaithota](https://github.com/NiranjanKaithota)  
+- [Sreeharish TJ](https://github.com/TJSreeharish)  
+- [Mohith Tp](https://GitHub/MohithTP) 
+- [SriRam.A](https://github.com/Sri-Ram-A)
 
-## 📜 License & Acknowledgments
 
-* Inspired by the [Restaurantly template](https://bootstrapmade.com/restaurantly-restaurant-template/)
-* Built with:
 
-  * [Flask](https://flask.palletsprojects.com)
-  * [Supabase](https://supabase.com)
-  * [Bootstrap](https://getbootstrap.com)
 
 
 
