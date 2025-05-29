@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             background-color: #1a1814;
             color: #fff;
         }
+
         .donation-item {
             background-color: rgba(41, 38, 31, 0.8);
             border: 1px solid #cda45e;
@@ -18,12 +20,15 @@
             margin-bottom: 20px;
             transition: box-shadow 0.3s ease;
         }
+
         .donation-item:hover {
             box-shadow: 0 0 10px #cda45e;
         }
+
         .donation-item h5 {
             color: #cda45e;
         }
+
         .place-order-btn {
             background-color: #cda45e;
             color: #1a1814;
@@ -36,14 +41,17 @@
             align-items: center;
             text-decoration: none;
         }
+
         .place-order-btn:hover {
             background-color: #ffda6b;
             box-shadow: 0 0 8px #ffda6b;
         }
+
         .place-order-btn svg {
             margin-right: 5px;
             fill: #1a1814;
         }
+
         #chatbot-btn {
             position: fixed;
             bottom: 20px;
@@ -60,6 +68,7 @@
             cursor: pointer;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         #chat-dialog {
             display: none;
             position: fixed;
@@ -74,6 +83,7 @@
             overflow: hidden;
             z-index: 1000;
         }
+
         #chat-header {
             background-color: #cda45e;
             color: #1a1814;
@@ -81,6 +91,7 @@
             text-align: center;
             font-weight: bold;
         }
+
         #chat-messages {
             padding: 10px;
             height: 300px;
@@ -88,16 +99,19 @@
             font-size: 14px;
             color: #1a1814;
         }
+
         #chat-input {
             display: flex;
             border-top: 1px solid #cda45e;
         }
+
         #chat-input input {
             flex: 1;
             border: none;
             padding: 10px;
             font-size: 14px;
         }
+
         #chat-input button {
             background-color: #cda45e;
             border: none;
@@ -105,8 +119,39 @@
             padding: 10px;
             cursor: pointer;
         }
+
+        .confirm-order-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .confirm-order-btn:hover {
+            background-color: #218838;
+        }
+
+        .cancel-order-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cancel-order-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
+
 <body>
     <div class="container py-5">
         <h2 class="text-center mb-4" style="color: #cda45e;">Available Donations</h2>
@@ -119,13 +164,18 @@
                     <p><strong>Storage:</strong> {{ donation.storage }}</p>
                     <p><strong>Dietary Info:</strong> {{ donation.dietary }}</p>
                     <p><strong>Expires:</strong> {{ donation.expiry_date }} at {{ donation.expiry_time }}</p>
-                    <p><strong>Transportation:</strong> {{ 'Required' if donation.transportation == 'yes' else 'Not required' }}</p>
-                    <p><strong>Donor:</strong> <a href="{{ url_for('user_posts', user_email=donation.user_email) }}">{{ donation.user_email }}</a></p>
-                    
+                    <p><strong>Transportation:</strong> {{ 'Required' if donation.transportation == 'yes' else 'Not
+                        required' }}</p>
+                    <p><strong>Donor:</strong> <a href="{{ url_for('user_posts', user_email=donation.user_email) }}">{{
+                            donation.user_email }}</a></p>
+
                     <!-- Place Order Button -->
-                    <button class="place-order-btn" onclick="startChatbot('{{ donation.food_type }}', '{{ donation.quantity }}', '{{ donation.user_email }}', this)">
+                    <button class="place-order-btn"
+                    
+                        onclick="startChatbot('{{ donation.food_type }}', '{{ donation.quantity }}', '{{ donation.user_email }}', this)">
                         <svg width="16" height="16" viewBox="0 0 24 24">
-                            <path d="M12 2a10 10 0 0 1 10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2zm1 10h8v2h-8v8h-2v-8H3v-2h8V4h2v8z"/>
+                            <path
+                                d="M12 2a10 10 0 0 1 10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2zm1 10h8v2h-8v8h-2v-8H3v-2h8V4h2v8z" />
                         </svg>
                         Place Order
                     </button>
@@ -137,7 +187,10 @@
 
     <!-- Chat Dialog -->
     <div id="chat-dialog" style="display: none;">
-        <div id="chat-header">Order Details</div>
+        <div id="chat-header">
+            Order Details
+            <button onclick="toggleChat()" style="float: right; background: none; border: none; color: #1a1814; font-size: 18px; cursor: pointer;">&times;</button>
+        </div>
         <div id="chat-messages"></div>
         <div id="chat-input">
             <input type="text" id="user-message" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
@@ -161,18 +214,36 @@
         };
 
         function startChatbot(foodType, quantity, donorEmail, button) {
-            orderData.donor_email = donorEmail;
-            orderData.chatbot_responses.food_type = foodType;
-            orderData.chatbot_responses.available_quantity = quantity;
+            console.log('Starting chatbot with:', { foodType, quantity, donorEmail });
+            
+            // Reset the chatbot state
+            currentQuestionIndex = 0;
+            isAskingPresetQuestions = true;
+            
+            // Set up order data - FIXED: Ensure donor_email is properly set
+            orderData = {
+                donor_email: donorEmail,  // Make sure this is set correctly
+                chatbot_responses: {
+                    food_type: foodType,
+                    available_quantity: quantity
+                }
+            };
 
+            console.log('Order data initialized:', orderData);
+
+            // Show chat dialog
             toggleChat();
+            
+            // Initialize chat messages
             const chatMessages = document.getElementById("chat-messages");
             chatMessages.innerHTML = `<div><strong>Bot:</strong> Welcome! You're interested in ${foodType} (${quantity} servings available). Let's confirm your order details.</div>`;
+            
+            // Start asking questions
             askNextQuestion();
         }
 
         function sendMessage() {
-            let userMessage = document.getElementById("user-message").value;
+            let userMessage = document.getElementById("user-message").value.trim();
             document.getElementById("user-message").value = "";
 
             if (!userMessage) return;
@@ -181,15 +252,71 @@
             chatMessages.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
 
             if (isAskingPresetQuestions) {
-                orderData.chatbot_responses[`question_${currentQuestionIndex}`] = {
-                    question: questions[currentQuestionIndex - 1],
+                // Store the answer
+                orderData.chatbot_responses[`question_${currentQuestionIndex + 1}`] = {
+                    question: questions[currentQuestionIndex],
                     answer: userMessage
                 };
+                
+                console.log('Stored answer for question', currentQuestionIndex + 1, ':', userMessage);
+                currentQuestionIndex++;
                 askNextQuestion();
+            } else {
+                // Handle free-form conversation after questions are done
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> Thank you for your message. Is there anything specific you'd like to change in your order?</div>`;
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function askNextQuestion() {
+            const chatMessages = document.getElementById("chat-messages");
+            
+            if (currentQuestionIndex < questions.length) {
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> ${questions[currentQuestionIndex]}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } else {
+                // All questions answered, show summary and confirm button
+                isAskingPresetQuestions = false;
+                chatMessages.innerHTML += "<div><strong>Bot:</strong> Thank you! Your order information is complete. Here's a summary:</div>";
+                
+                // Display summary
+                const responses = orderData.chatbot_responses;
+                chatMessages.innerHTML += `<div><strong>Summary:</strong><br>
+                    • Food: ${responses.food_type}<br>
+                    • Available: ${responses.available_quantity}<br>
+                    • You need: ${responses.question_2?.answer || 'N/A'}<br>
+                    • Time: ${responses.question_3?.answer || 'N/A'}<br>
+                    • Method: ${responses.question_4?.answer || 'N/A'}<br>
+                    • Address: ${responses.question_5?.answer || 'N/A'}
+                </div>`;
+                
+                chatMessages.innerHTML += "<div><strong>Bot:</strong> Please confirm your order or cancel if you need to make changes:</div>";
+                
+                // Add confirm and cancel buttons
+                chatMessages.innerHTML += `
+                    <div style="text-align: center; margin: 10px 0;">
+                        <button class="confirm-order-btn" onclick="confirmOrder()">Confirm Order</button>
+                        <button class="cancel-order-btn" onclick="cancelOrder()">Cancel</button>
+                    </div>
+                `;
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         }
 
         function confirmOrder() {
+            console.log('Confirming order with data:', orderData);
+            
+            // Validate that donor_email exists before sending
+            if (!orderData.donor_email) {
+                console.error('Missing donor_email in orderData');
+                const chatMessages = document.getElementById("chat-messages");
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> ❌ Error: Missing donor information. Please try again.</div>`;
+                return;
+            }
+            
+            // Make the POST request
             fetch('/complete_order', {
                 method: 'POST',
                 headers: {
@@ -197,30 +324,56 @@
                 },
                 body: JSON.stringify(orderData)
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert('Error: ' + data.error);
-                } else {
-                    const chatMessages = document.getElementById("chat-messages");
-                    chatMessages.innerHTML += `
-                        <div><strong>Bot:</strong> Order confirmed! Here's your order summary:</div>
-                        <div class="order-summary">
-                            <p><strong>Donor Email:</strong> ${orderData.donor_email}</p>
-                            <p><strong>Food Type:</strong> ${orderData.chatbot_responses.food_type}</p>
-                            <p><strong>Quantity:</strong> ${orderData.chatbot_responses.question_2.answer}</p>
-                            <p><strong>Delivery Time:</strong> ${orderData.chatbot_responses.question_3.answer}</p>
-                            <p><strong>Delivery Method:</strong> ${orderData.chatbot_responses.question_4.answer}</p>
-                            <p><strong>Delivery Address:</strong> ${orderData.chatbot_responses.question_5.answer}</p>
-                        </div>
-                        <div><strong>Bot:</strong> A confirmation has been sent and your order details have been saved.</div>
-                    `;
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(`HTTP ${response.status}: ${err.error || 'Unknown error'}`);
+                    });
                 }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                const chatMessages = document.getElementById("chat-messages");
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> ✅ Order completed successfully! You will receive an email confirmation shortly.</div>`;
+                
+                // Disable the chat input
+                document.getElementById("user-message").disabled = true;
+                document.querySelector("#chat-input button").disabled = true;
+                
+                // Auto-close after 3 seconds
+                setTimeout(() => {
+                    toggleChat();
+                    // Reset for next order
+                    document.getElementById("user-message").disabled = false;
+                    document.querySelector("#chat-input button").disabled = false;
+                }, 3000);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while processing your order. Please try again.');
+                const chatMessages = document.getElementById("chat-messages");
+                chatMessages.innerHTML += `<div><strong>Bot:</strong> ❌ Error: ${error.message}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             });
+        }
+
+        function cancelOrder() {
+            const chatMessages = document.getElementById("chat-messages");
+            chatMessages.innerHTML += "<div><strong>Bot:</strong> Order cancelled. Feel free to start over if needed.</div>";
+            
+            // Reset the order data
+            orderData = {
+                donor_email: '',
+                chatbot_responses: {}
+            };
+            currentQuestionIndex = 0;
+            isAskingPresetQuestions = true;
+            
+            // Close chat after 2 seconds
+            setTimeout(() => {
+                toggleChat();
+            }, 2000);
         }
 
         function toggleChat() {
@@ -233,20 +386,7 @@
                 sendMessage();
             }
         }
-
-        function askNextQuestion() {
-            const chatMessages = document.getElementById("chat-messages");
-            if (currentQuestionIndex < questions.length) {
-                chatMessages.innerHTML += `<div><strong>Bot:</strong> ${questions[currentQuestionIndex]}</div>`;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                currentQuestionIndex++;
-            } else {
-                isAskingPresetQuestions = false;
-                chatMessages.innerHTML += "<div><strong>Bot:</strong> Thank you! Your order information is complete. Here's a summary:</div>";
-                chatMessages.innerHTML += "<div><strong>Bot:</strong> Is there anything else you'd like to add or change?</div>";
-                chatMessages.innerHTML += "<button onclick='confirmOrder()'>Confirm Order</button>";
-            }
-        }
     </script>
 </body>
+
 </html>
